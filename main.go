@@ -39,7 +39,7 @@ func run() error {
 	}
 	defer w.Destroy()
 
-	if err := drawTitle(r); err != nil {
+	if err := drawTitle(r, "THE BIRD GAME"); err != nil {
 		return fmt.Errorf("could not draw the title: %v", err)
 	}
 
@@ -66,7 +66,7 @@ func run() error {
 
 }
 
-func drawTitle(r *sdl.Renderer) error {
+func drawTitle(r *sdl.Renderer, text string) error {
 
 	r.Clear()
 
@@ -78,7 +78,7 @@ func drawTitle(r *sdl.Renderer) error {
 	defer f.Close()
 
 	c := sdl.Color{R: 255, G: 100, B: 0, A: 255}
-	s, err := f.RenderUTF8Solid("THE BIRD GAME", c)
+	s, err := f.RenderUTF8Solid(text, c)
 
 	if err != nil {
 		return fmt.Errorf("could not render title: %v", err)
