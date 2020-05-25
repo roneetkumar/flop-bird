@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	gravity = 0.25
+	gravity   = 0.25
+	jumpSpeed = 5
 )
 
 type bird struct {
@@ -54,4 +55,10 @@ func (b *bird) destroy() {
 	for _, b := range b.textures {
 		b.Destroy()
 	}
+}
+
+func (b *bird) jump() {
+
+	b.speed = -jumpSpeed
+
 }
