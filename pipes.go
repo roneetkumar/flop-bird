@@ -68,19 +68,24 @@ func (ps *pipes) touch(b *bird) {
 	for _, p := range ps.pipes {
 		p.touch(b)
 	}
-
 }
 
 func (ps *pipes) update() {
+	ps.mu.Lock()
+	defer ps.mu.Unlock()
 
-	ps.mu.RLock()
-	defer ps.mu.RUnlock()
+	var rem []*pipe
 
 	for _, p := range ps.pipes {
 		p.mu.Lock()
 		p.mu.Unlock()
 		p.x -= ps.speed
+
+		if p.x+p.w > 0 {
+			rem = append(rem, p)
+		}
 	}
+	ps.pipes = rem
 }
 
 func (ps *pipes) paint(r *sdl.Renderer) error {
