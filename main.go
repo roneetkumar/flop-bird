@@ -49,12 +49,19 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("could not create scene %v", err)
 	}
+
 	defer s.destroy()
 
 	ctx, cancel := context.WithCancel(context.Background())
-	time.AfterFunc(5*time.Second, cancel)
+	defer cancel()
 
-	return <-s.run(ctx, r)
+	select {
+	case err := <-s.run(r, ctx):
+		return fmt.Errorf("could not paint the scene: %v", err)
+	case <-time.After(5 * time.Second):
+		return nil
+	}
+
 }
 
 func drawTitle(r *sdl.Renderer) error {
